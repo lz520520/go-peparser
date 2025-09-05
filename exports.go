@@ -8,6 +8,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"sort"
 )
 
 const (
@@ -312,7 +313,9 @@ func (pe *File) parseExportDirectory(rva, size uint32) error {
 
 		exp.Functions = append(exp.Functions, newExport)
 	}
-
+	sort.Slice(exp.Functions, func(i, j int) bool {
+		return exp.Functions[i].Ordinal < exp.Functions[j].Ordinal
+	})
 	pe.Export = exp
 	pe.HasExport = true
 	return nil
